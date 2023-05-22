@@ -4,7 +4,7 @@
 
 class Square:
     """class Square Def"""
-    def __init__(self, size=0, area):
+    def __init__(self, size=0,):
         
         if type(size) is not int:
             raise TypeError("size must be an integer")
@@ -12,4 +12,10 @@ class Square:
             raise ValueError("size must be >= 0")
         else:
             self.__size = size
-            self.area = area
+        def area(self):
+            """
+            calculates area of square
+            returns: area
+
+            """
+            return (self.__size)**2
