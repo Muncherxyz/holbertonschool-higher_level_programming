@@ -1,23 +1,23 @@
 #!/usr/bin/python3
-"""Filters all the states that have 'a' in their name"""
-from sys import argv
+"""
+Deletes all State objects with a name containing the letter a
+"""
+import sys
 from model_state import Base, State
-from sqlalchemy import (create_engine)
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import func
 
-if __name__ == "__main__":
-    db = create_engine(
-        "mysql+mysqldb://{}:{}@localhost/{}".format(argv[1], argv[2], argv[3]),
-        pool_pre_ping=True)
-    Base.metadata.create_all(db)
-    # Create a premade "Session" class
-    Session = sessionmaker(bind=db)
-    # Instance of the Session
-    ses = Session()
-    # Make a query
-    ses.query(State).filter(State.name.like(func.binary('%a%')))\
-        .delete(synchronize_session='fetch')
-    ses.commit()
-    # Close the instance of session
-    ses.close()
+
+if __name__ == '__main__':
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'.
+                           format(sys.argv[1], sys.argv[2], sys.argv[3]),
+                           pool_pre_ping=True)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    states = session.query(State).filter(State.name.like('%a%')).all()
+
+    for state in states:
+        session.delete(state)
+
+    session.commit()
